@@ -60,11 +60,11 @@ class EsaDumperForNotion
             "<li>作成時刻: #{created_at.strftime("%Y/%m/%d %H:%M:%S")} by #{created_by}</li>" \
             "<li>更新時刻: #{updated_at.strftime("%Y/%m/%d %H:%M:%S")} by #{updated_by}</li>" \
             "</ul>" \
-            "<hr>"
+            "\n<hr>\n"
           html_str += parse_html_for_notion(body_html)
 
           md_str += "\n\n- - -\n\n## コメント一覧\n\n" if comments_count > 0
-          html_str += "<hr><h2>コメント一覧</h2>" if comments_count > 0
+          html_str += "\n<hr>\n<h2>コメント一覧</h2>" if comments_count > 0
           comments.each do |comment|
             comment_created_at = Time.parse(comment["created_at"])
             comment_created_by = "#{comment["created_by"]["name"]} (#{comment["created_by"]["screen_name"]})"
