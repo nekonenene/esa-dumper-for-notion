@@ -57,7 +57,11 @@ loop do
       "<li>更新時刻: #{updated_at.strftime("%Y/%m/%d %H:%M:%S")} by #{updated_by}</li>" \
       "</ul>" \
       "<hr>"
-    html_str += body_html
+
+    # タイトル部分が <span class="hidden" data-text="たいとる"> &gt; たいとる</span> のようになっている箇所があるので削除しているが
+    # <span class="hidden"><b>たいとる</b></span> のようになっている箇所では誤動作してしまう問題がある
+    removed_hidden_html = body_html.gsub(%r{<[^<]*class="hidden"[^>]*>[^<]*</[^>]+>}, "")
+    html_str += removed_hidden_html
 
     md_str += "\n\n- - -\n\n## コメント一覧\n\n" if comments_count > 0
     html_str += "<hr><h2>コメント一覧</h2>" if comments_count > 0
