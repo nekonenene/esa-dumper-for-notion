@@ -85,6 +85,7 @@ class EsaDumperForNotion
 
         puts "next_page: #{next_page}"
         break if next_page.nil?
+        page = next_page
       end
 
       puts "Successfully completed!!"
