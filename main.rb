@@ -5,7 +5,7 @@ require "time"
 
 class EsaDumperForNotion
   class << self
-    def main
+    def exec(first_page: 1)
       json_dir = "export/json"
       html_dir = "export/html"
       markdown_dir = "export/markdown"
@@ -14,7 +14,7 @@ class EsaDumperForNotion
       FileUtils.mkdir_p markdown_dir
 
       client = Esa::Client.new(current_team: ENV["ESA_TEAM_NAME"], access_token: ENV["ESA_ACCESS_TOKEN"])
-      page = 1
+      page = first_page
 
       loop do
         response = client.posts(include: "comments", sort: "created", order: "asc", per_page: 100, page: page)
@@ -105,4 +105,5 @@ class EsaDumperForNotion
   end
 end
 
-EsaDumperForNotion.main
+first_page = ARGV[0] || 1
+EsaDumperForNotion.exec(first_page: first_page)
