@@ -1,6 +1,7 @@
 require "dotenv/load"
 require "esa"
 require "fileutils"
+require "gemoji"
 require "time"
 
 class EsaDumperForNotion
@@ -99,6 +100,13 @@ class EsaDumperForNotion
       # コードブロック部分が <div class="code-block" data-sourcepos="25:1-34:3"><div class="highlight"><pre class="highlight plaintext"><code> と出力され
       # Notion のインポート時にコードブロックでなくコードテキストになってしまうため、div タグ部分を削除
       parsed_html = parsed_html.gsub(%r{<div class="code-block".+<pre}, "<pre").gsub(%r{</pre></div></div>}, "</pre>")
+      # emoji が画像になっているので文字に直す
+      parsed_html =
+        parsed_html.gsub(%r{<img class="emoji" title=":([^"]+):"[^>]+>}) do
+          emoji = Emoji.find_by_alias($1)
+          puts "[warning] emoji :#{$1}: の変換に失敗" if emoji.nil?
+          emoji&.raw || ":#{$1}:"
+        end
 
       parsed_html
     end

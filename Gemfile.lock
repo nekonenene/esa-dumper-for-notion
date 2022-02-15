@@ -32,6 +32,7 @@ GEM
     faraday-retry (1.0.3)
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
+    gemoji (3.0.1)
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
@@ -45,6 +46,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   esa
+  gemoji
 
 BUNDLED WITH
    2.2.22
