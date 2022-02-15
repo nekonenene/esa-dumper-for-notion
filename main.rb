@@ -60,8 +60,11 @@ loop do
 
     # タイトル部分が <span class="hidden" data-text="たいとる"> &gt; たいとる</span> のようになっている箇所があるので削除しているが
     # <span class="hidden"><b>たいとる</b></span> のようになっている箇所では誤動作してしまう問題がある
-    removed_hidden_html = body_html.gsub(%r{<[^<]*class="hidden"[^>]*>[^<]*</[^>]+>}, "")
-    html_str += removed_hidden_html
+    parsed_html = body_html.gsub(%r{<[^<]*class="hidden"[^>]*>[^<]*</[^>]+>}, "")
+    # コードブロック部分が <pre class="highlight plaintext"><code> のようになっているために <pre> であることより <code> であることが優先され
+    # Notion のインポート時にコードブロックでなくコードテキストになってしまうため、単純な pre タグに変換
+    parsed_html = parsed_html.gsub(%r{<pre class[^>]+><code>}, "<pre>").gsub(%r{</code></pre>}, "</pre>")
+    html_str += parsed_html
 
     md_str += "\n\n- - -\n\n## コメント一覧\n\n" if comments_count > 0
     html_str += "<hr><h2>コメント一覧</h2>" if comments_count > 0
