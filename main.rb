@@ -41,7 +41,15 @@ loop do
     comments_count = post["comments_count"]
     comments = post["comments"]
 
-    html =
+    md_str =
+      "* ID: #{id}\n" \
+      "* category: #{category}\n" \
+      "* 作成時刻: #{created_at.strftime("%Y/%m/%d %H:%M:%S")} by #{created_by}\n" \
+      "* 更新時刻: #{updated_at.strftime("%Y/%m/%d %H:%M:%S")} by #{updated_by}\n" \
+      "\n- - -\n\n"
+    md_str += body_md
+
+    html_str =
       "<ul>" \
       "<li>ID: #{id}</li>" \
       "<li>category: #{category}</li>" \
@@ -49,20 +57,25 @@ loop do
       "<li>更新時刻: #{updated_at.strftime("%Y/%m/%d %H:%M:%S")} by #{updated_by}</li>" \
       "</ul>" \
       "<hr>"
+    html_str += body_html
 
-    html += body_html
-
-    html += "<hr><h2>コメント一覧</h2>" if comments_count > 0
+    md_str += "\n\n- - -\n\n## コメント一覧\n\n" if comments_count > 0
+    html_str += "<hr><h2>コメント一覧</h2>" if comments_count > 0
     comments.each do |comment|
       comment_created_at = Time.parse(comment["created_at"])
       comment_created_by = "#{comment["created_by"]["name"]} (#{comment["created_by"]["screen_name"]})"
 
-      html += "<h3>#{comment_created_by} at #{comment_created_at.strftime("%Y/%m/%d %H:%M:%S")}</h3>"
-      html += comment["body_html"]
+      md_str += "### #{comment_created_by} at #{comment_created_at.strftime("%Y/%m/%d %H:%M:%S")}\n\n"
+      md_str += comment["body_md"] + "\n\n"
+      html_str += "<h3>#{comment_created_by} at #{comment_created_at.strftime("%Y/%m/%d %H:%M:%S")}</h3>"
+      html_str += comment["body_html"]
     end
 
+    File.open("#{markdown_dir}/#{file_name}.md", mode = "w") do |f|
+      f.write(md_str)
+    end
     File.open("#{html_dir}/#{file_name}.html", mode = "w") do |f|
-      f.write(html)
+      f.write(html_str)
     end
   end
 
