@@ -11,6 +11,9 @@ Notion へのインポートには HTML を使うのがおすすめです。
 もしくは、GitHub Flavored Markdown を解釈しつつ HTML に変換するライブラリを使って、  
 マークダウンを HTML に変換してからインポートするという手もあります。試していないですが、そっちの方がより正確かも。
 
+インポート後、さらに [nekonenene/esa-to-notion-py](https://github.com/nekonenene/esa-to-notion-py) を使うことで画像の参照先を esa から Notion に変更できたりします。  
+参考: https://nekonenene.hatenablog.com/entry/migrate-esa-to-notion
+
 ## 使い方
 
 ```sh
